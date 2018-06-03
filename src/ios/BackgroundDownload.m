@@ -131,6 +131,7 @@
     }
     for(NSInteger i = 0; i < downloadTasks.count; i++) {
         NSString * existingUrl = ((NSURLSessionDownloadTask *)downloadTasks[i]).originalRequest.URL.absoluteString;
+        if (!existingUrl) return;
         bool urlMatches = false;
         if (regex != nil) {
             NSString *substringForExistingUrlMatch = nil;
@@ -227,7 +228,7 @@
         }
         CDVPluginResult* errorResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
         [self.commandDelegate sendPluginResult:errorResult callbackId:curDownload.callbackId];
-    } if (curDownload.error != nil) {
+    } else if (curDownload.error != nil) {
         CDVPluginResult* errorResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:curDownload.error];
         [self.commandDelegate sendPluginResult:errorResult callbackId:curDownload.callbackId];
     } else {
